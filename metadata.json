@@ -1,6 +1,6 @@
 {
   "name": "Disk Usage",
-  "description": "Icon in top panel that display the the percentage of disk usage of the biggest disk installed on the system.",
+  "description": "Label in top panel that display the the percentage of disk usage of the biggest disk installed on the system.",
   "uuid": "disk-usage@0ct0puce.com",
   "shell-version": [
     "42"
