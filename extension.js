@@ -23,7 +23,6 @@ const GETTEXT_DOMAIN = 'my-indicator-extension';
 const { GObject, St } = imports.gi;
 const ExtensionUtils = imports.misc.extensionUtils;
 const Main = imports.ui.main;
-const Mainloop = imports.mainloop;
 const GLib = imports.gi.GLib;
 
 const PanelMenu = imports.ui.panelMenu;
@@ -31,7 +30,7 @@ const PopupMenu = imports.ui.popupMenu;
 
 const _ = ExtensionUtils.gettext;
 
-let panelButton, panelButtonText, timeout, statusText, finalText;
+let timeout, statusText, finalText;
 
 
 
@@ -94,6 +93,7 @@ class Extension {
         Main.panel.addToStatusArea(this._uuid, this._indicator);
     }
     disable() {
+	clearInterval(intervalId);
         this._indicator.destroy();
         this._indicator = null;
     }
@@ -101,13 +101,8 @@ class Extension {
 
 function init(meta) {
   return new Extension(meta.uuid);
-  timeout = Mainloop.timeout_add_seconds(5.0, setLabelText());
 }
 
 function enable() {
   init();
-}
-
-function disable() {
-  Extension.disable();
 }
