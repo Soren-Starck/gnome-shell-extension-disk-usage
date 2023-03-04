@@ -1,10 +1,9 @@
 {
+  "uuid": "disk-usage@0ct0puce.com",
   "name": "Disk Usage",
   "description": "Label in top panel that display the the percentage of disk usage of the biggest disk installed on the system.",
-  "uuid": "disk-usage@0ct0puce.com",
-  "shell-version": [
-    "42"
-  ],
   "version": 1,
-  "url": "https://github.com/0CT0PUCE-LOG/gnome-shell-extension-disk-usage"
+  "shell-version": ["42"],
+  "url": "https://github.com/0CT0PUCE-LOG/gnome-shell-extension-disk-usage",
+  "session-modes":  [ "unlock-dialog", "user" ]
 }
