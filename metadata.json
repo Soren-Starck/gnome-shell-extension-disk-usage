@@ -4,5 +4,7 @@
   "uuid": "disk-usage@0ct0puce.com",
   "shell-version": [
     "42"
-  ]
+  ],
+  "version": 1,
+  "url": "https://github.com/0CT0PUCE-LOG/gnome-shell-extension-disk-usage"
 }
