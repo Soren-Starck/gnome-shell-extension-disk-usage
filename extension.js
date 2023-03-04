@@ -98,22 +98,7 @@ class Extension {
         this._indicator = null;
     }
 }
-/*
-function setLabelText(){
-  var [ok, out, err, exit] = GLib.spawn_command_line_sync('df -h /');
-  if(err.toString() != null){
-  	statusText.set_text(err.toString());
-    Main.notify(_(err.toString()));
-    finalText = "DISK\n" + extraireAvantPourcentage(out.toString().substring(out.toString().indexOf("/") + 1));
-    statusText.set_text(finalText);
-  }
-  else{
-  	finalText = "DISK\n" + extraireAvantPourcentage(out.toString().substring(out.toString().indexOf("/") + 1));
-   	statusText.set_text(finalText);
-  }
-  return true;
-}
-*/         
+
 function init(meta) {
   return new Extension(meta.uuid);
   timeout = Mainloop.timeout_add_seconds(5.0, setLabelText());
