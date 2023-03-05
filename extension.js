@@ -32,6 +32,8 @@ const _ = ExtensionUtils.gettext;
 
 let timeout, statusText, finalText;
 
+var intervalId;
+
 
 
 function extraireAvantPourcentage(chaine) {
@@ -73,7 +75,7 @@ class Indicator extends PanelMenu.Button {
         this.menu.addMenuItem(reload);
         this.menu.addMenuItem(credits);
         
-        var intervalId = window.setInterval(function(){
+        intervalId = window.setInterval(function(){
   			var [ok, out, err, exit] = GLib.spawn_command_line_sync('df -h /');
         	finalText = "DISK\n" + extraireAvantPourcentage(out.toString().substring(out.toString().indexOf("/") + 1));
     		statusText.set_text(finalText);
