@@ -3,6 +3,6 @@
   "name": "Disk Usage",
   "description": "Label in top panel that display the the percentage of disk usage of the biggest disk installed on the system.",
   "version": 1,
-  "shell-version": ["42"],
+  "shell-version": ["42", "43", "44"],
   "url": "https://github.com/0CT0PUCE-LOG/gnome-shell-extension-disk-usage"
 }
