@@ -24,6 +24,8 @@ const { GObject, St } = imports.gi;
 const ExtensionUtils = imports.misc.extensionUtils;
 const Main = imports.ui.main;
 const GLib = imports.gi.GLib;
+const Clutter = imports.gi.Clutter;
+
 
 const PanelMenu = imports.ui.panelMenu;
 const PopupMenu = imports.ui.popupMenu;
@@ -33,6 +35,9 @@ const _ = ExtensionUtils.gettext;
 let timeout, statusText, finalText;
 
 var intervalId;
+
+let storageIcon = new St.Icon({ icon_name: 'drive-harddisk-symbolic',
+                                 style_class: 'system-status-icon' });
 
 
 
@@ -51,13 +56,23 @@ const Indicator = GObject.registerClass(
 class Indicator extends PanelMenu.Button {
     _init() {
         super._init(0.0, _('My Shiny Indicator'));
+        
+        let box = new St.BoxLayout({ style_class: 'system-status-icon-box' });
+        
+        box.add_child(storageIcon);
         var [ok, out, err, exit] = GLib.spawn_command_line_sync('df -h /');
-        finalText = "DISK\n" + extraireAvantPourcentage(out.toString().substring(out.toString().indexOf("/") + 1));
+        finalText = extraireAvantPourcentage(out.toString().substring(out.toString().indexOf("/") + 1));
+        //"DISK\n" + 
         statusText = new St.Label({
             style_class : "statusText",
 	    	text : finalText
 	    });
-        this.add_child(statusText);
+	    statusText.y_align = Clutter.ActorAlign.CENTER;
+	    box.add_child(statusText);
+	    
+	    
+	    
+        this.add_child(box);
         
         let credits = new PopupMenu.PopupMenuItem(_('Credits'));
         
@@ -68,7 +83,7 @@ class Indicator extends PanelMenu.Button {
         let reload = new PopupMenu.PopupMenuItem(_('Reload'));
         reload.connect('activate', () => {
         	var [ok, out, err, exit] = GLib.spawn_command_line_sync('df -h /');
-        	finalText = "DISK\n" + extraireAvantPourcentage(out.toString().substring(out.toString().indexOf("/") + 1));
+        	finalText = extraireAvantPourcentage(out.toString().substring(out.toString().indexOf("/") + 1));
     		statusText.set_text(finalText);
         });
         
@@ -77,7 +92,7 @@ class Indicator extends PanelMenu.Button {
         
         intervalId = window.setInterval(function(){
   			var [ok, out, err, exit] = GLib.spawn_command_line_sync('df -h /');
-        	finalText = "DISK\n" + extraireAvantPourcentage(out.toString().substring(out.toString().indexOf("/") + 1));
+        	finalText = extraireAvantPourcentage(out.toString().substring(out.toString().indexOf("/") + 1));
     		statusText.set_text(finalText);
 		}, 15000);
     }
