@@ -36,8 +36,7 @@ let timeout, statusText, finalText;
 
 var intervalId;
 
-let storageIcon = new St.Icon({ icon_name: 'drive-harddisk-symbolic',
-                                 style_class: 'system-status-icon' });
+
 
 
 
@@ -56,6 +55,9 @@ const Indicator = GObject.registerClass(
 class Indicator extends PanelMenu.Button {
     _init() {
         super._init(0.0, _('My Shiny Indicator'));
+        
+        let storageIcon = new St.Icon({ icon_name: 'drive-harddisk-symbolic',
+                                 style_class: 'system-status-icon' });
         
         let box = new St.BoxLayout({ style_class: 'system-status-icon-box' });
         
