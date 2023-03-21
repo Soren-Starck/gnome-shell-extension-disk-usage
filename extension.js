@@ -70,6 +70,7 @@ class Indicator extends PanelMenu.Button {
 	    	text : finalText
 	    });
 	    statusText.y_align = Clutter.ActorAlign.CENTER;
+	    statusText.x_align = Clutter.ActorAlign.CENTER;
 	    box.add_child(statusText);
 	    
 	    
