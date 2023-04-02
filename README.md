@@ -1,4 +1,4 @@
-# gnome-shell-extension-disk-usage
+<h1 align="center">gnome-shell-extension-disk-usage</h1>
 
 Label in top panel that display the percentage of disk usage of the biggest disk installed on the system.
 
