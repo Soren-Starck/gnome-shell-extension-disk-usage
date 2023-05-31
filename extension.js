@@ -35,7 +35,6 @@ var intervalId;
 
 
 
-
 function extraireAvantPourcentage(chaine) {
   let result = '';
   for (let i = 0; i < chaine.length; i++) {
