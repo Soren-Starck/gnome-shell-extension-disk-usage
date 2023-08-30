@@ -14,6 +14,7 @@
 *
 **********************************************************************/ 
 
+
 const GETTEXT_DOMAIN = 'my-indicator-extension';
 
 const { GObject, St } = imports.gi;
