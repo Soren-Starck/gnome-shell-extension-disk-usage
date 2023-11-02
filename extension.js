@@ -25,12 +25,7 @@ import { notify, panel } from 'resource:///org/gnome/shell/ui/main.js';
 import {Button} from 'resource:///org/gnome/shell/ui/panelMenu.js';
 import { PopupMenuItem } from 'resource:///org/gnome/shell/ui/popupMenu.js';
 
-
-
 var intervalId;
-
-
-
 
 function extraireAvantPourcentage(chaine) {
   let result = '';
@@ -53,8 +48,7 @@ const Indicator = GObject.registerClass(
     _init() {
       super._init(0.0, _('My Shiny Indicator'));
 
-      let statusText, finalText;
-
+      let statusText;
 
       let storageIcon = new St.Icon({ icon_name: 'drive-harddisk-symbolic',
                                 style_class: 'system-status-icon' });
@@ -63,11 +57,10 @@ const Indicator = GObject.registerClass(
 
       box.add_child(storageIcon);
       var [ok, out, err, exit] = GLib.spawn_command_line_sync('df -h /');
-      finalText = glibOutToPercent(out);
       //"DISK\n" +
       statusText = new St.Label({
             style_class : "statusText",
-        text : finalText
+        text : glibOutToPercent(out)
       });
       statusText.y_align = Clutter.ActorAlign.CENTER;
       statusText.x_align = Clutter.ActorAlign.CENTER;
@@ -84,8 +77,7 @@ const Indicator = GObject.registerClass(
       let reload = new PopupMenuItem(_('Reload'));
       reload.connect('activate', () => {
         var [ok, out, err, exit] = GLib.spawn_command_line_sync('df -h /');
-        finalText = glibOutToPercent(out);
-      statusText.set_text(finalText);
+        statusText.set_text(glibOutToPercent(out));
       });
 
       this.menu.addMenuItem(reload);
@@ -93,8 +85,7 @@ const Indicator = GObject.registerClass(
 
       intervalId = window.setInterval(function(){
         var [ok, out, err, exit] = GLib.spawn_command_line_sync('df -h /');
-        finalText = glibOutToPercent(out);
-        statusText.set_text(finalText);
+        statusText.set_text(glibOutToPercent(out));
       }, 15000);
     }
   }
@@ -103,14 +94,15 @@ const Indicator = GObject.registerClass(
 
 
 export default class DiskUsageExtension extends Extension {
-    enable() {
-        this._indicator = new Indicator();
-        panel.addToStatusArea(this._uuid, this._indicator);
-    }
-    disable() {
-        clearInterval(intervalId);
-        this._indicator.destroy();
-        this._indicator = null;
-    }
+  enable() {
+    this._indicator = new Indicator();
+    panel.addToStatusArea(this._uuid, this._indicator);
+  }
+  disable() {
+    clearInterval(intervalId);
+    intervalId = null;
+    this._indicator.destroy();
+    this._indicator = null;
+  }
 }
 
