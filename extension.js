@@ -42,6 +42,11 @@ function extraireAvantPourcentage(chaine) {
   return result;
 }
 
+function glibOutToPercent(u) {
+  let tmpText = new TextDecoder().decode(u);
+  return extraireAvantPourcentage(tmpText.substring(tmpText.indexOf("/") + 1));
+}
+
 
 const Indicator = GObject.registerClass(
   class Indicator extends Button {
@@ -58,7 +63,7 @@ const Indicator = GObject.registerClass(
 
       box.add_child(storageIcon);
       var [ok, out, err, exit] = GLib.spawn_command_line_sync('df -h /');
-      finalText = extraireAvantPourcentage(out.toString().substring(out.toString().indexOf("/") + 1));
+      finalText = glibOutToPercent(out);
       //"DISK\n" +
       statusText = new St.Label({
             style_class : "statusText",
@@ -79,7 +84,7 @@ const Indicator = GObject.registerClass(
       let reload = new PopupMenuItem(_('Reload'));
       reload.connect('activate', () => {
         var [ok, out, err, exit] = GLib.spawn_command_line_sync('df -h /');
-        finalText = extraireAvantPourcentage(out.toString().substring(out.toString().indexOf("/") + 1));
+        finalText = glibOutToPercent(out);
       statusText.set_text(finalText);
       });
 
@@ -87,8 +92,8 @@ const Indicator = GObject.registerClass(
       this.menu.addMenuItem(credits);
 
       intervalId = window.setInterval(function(){
-        var [ok, out, err, exit] = GLib.GLib.spawn_command_line_sync('df -h /');
-        finalText = extraireAvantPourcentage(out.toString().substring(out.toString().indexOf("/") + 1));
+        var [ok, out, err, exit] = GLib.spawn_command_line_sync('df -h /');
+        finalText = glibOutToPercent(out);
         statusText.set_text(finalText);
       }, 15000);
     }
