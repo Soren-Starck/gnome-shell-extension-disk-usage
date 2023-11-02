@@ -15,21 +15,18 @@
 **********************************************************************/ 
 
 
-const GETTEXT_DOMAIN = 'my-indicator-extension';
+import GObject  from  'gi://GObject';
+import St from 'gi://St';
+import GLib from 'gi://GLib';
+import Clutter from 'gi://Clutter';
 
-const { GObject, St } = imports.gi;
-const ExtensionUtils = imports.misc.extensionUtils;
-const Main = imports.ui.main;
-const GLib = imports.gi.GLib;
-const Clutter = imports.gi.Clutter;
+import { Extension, gettext as _ } from 'resource:///org/gnome/shell/extensions/extension.js';
+import { notify, panel } from 'resource:///org/gnome/shell/ui/main.js';
+import {Button} from 'resource:///org/gnome/shell/ui/panelMenu.js';
+import { PopupMenuItem } from 'resource:///org/gnome/shell/ui/popupMenu.js';
 
 
-const PanelMenu = imports.ui.panelMenu;
-const PopupMenu = imports.ui.popupMenu;
-
-const _ = ExtensionUtils.gettext;
-
-let timeout, statusText, finalText;
+let statusText, finalText;
 
 var intervalId;
 
@@ -48,7 +45,7 @@ function extraireAvantPourcentage(chaine) {
 
 
 const Indicator = GObject.registerClass(
-class Indicator extends PanelMenu.Button {
+class Indicator extends Button {
     _init() {
         super._init(0.0, _('My Shiny Indicator'));
         
@@ -68,29 +65,29 @@ class Indicator extends PanelMenu.Button {
 	    statusText.y_align = Clutter.ActorAlign.CENTER;
 	    statusText.x_align = Clutter.ActorAlign.CENTER;
 	    box.add_child(statusText);
-	    
-	    
-	    
+
+
+
         this.add_child(box);
-        
-        let credits = new PopupMenu.PopupMenuItem(_('Credits'));
-        
+
+        let credits = new PopupMenuItem(_('Credits'));
+
         credits.connect('activate', () => {
-            Main.notify(_('Extension created by 0CT0PUCE'));
+          notify(_('Extension created by 0CT0PUCE'));
         });
-        
-        let reload = new PopupMenu.PopupMenuItem(_('Reload'));
+
+        let reload = new PopupMenuItem(_('Reload'));
         reload.connect('activate', () => {
         	var [ok, out, err, exit] = GLib.spawn_command_line_sync('df -h /');
         	finalText = extraireAvantPourcentage(out.toString().substring(out.toString().indexOf("/") + 1));
     		statusText.set_text(finalText);
         });
-        
+
         this.menu.addMenuItem(reload);
         this.menu.addMenuItem(credits);
-        
+
         intervalId = window.setInterval(function(){
-  			var [ok, out, err, exit] = GLib.spawn_command_line_sync('df -h /');
+  			var [ok, out, err, exit] = GLib.GLib.spawn_command_line_sync('df -h /');
         	finalText = extraireAvantPourcentage(out.toString().substring(out.toString().indexOf("/") + 1));
     		statusText.set_text(finalText);
 		}, 15000);
@@ -99,22 +96,15 @@ class Indicator extends PanelMenu.Button {
 
 
 
-class Extension {
-    constructor(uuid) {
-        this._uuid = uuid;
-        ExtensionUtils.initTranslations(GETTEXT_DOMAIN);
-    }
+export default class MyExtension extends Extension {
     enable() {
         this._indicator = new Indicator();
-        Main.panel.addToStatusArea(this._uuid, this._indicator);
+        panel.addToStatusArea(this._uuid, this._indicator);
     }
     disable() {
-	clearInterval(intervalId);
+	      clearInterval(intervalId);
         this._indicator.destroy();
         this._indicator = null;
     }
 }
 
-function init(meta) {
-  return new Extension(meta.uuid);
-}
